@@ -9,7 +9,6 @@ import Breadcrumb from '../components/common/breadcrumb';
 import SiderMenu from '../components/SiderMenu';
 import { getStorage } from '../utils/storage';
 import { fetch } from '../services';
-import { PermissionsContext } from '../models/context';
 
 const { Content } = Layout;
 
@@ -32,23 +31,21 @@ export default props => {
 
   const { data } = useSWR('sys.fakeAuthorityList', fetch);
   const { menuList, permissions } = data || {};
-  console.log('app', data);
+  // console.log('app', data);
 
   return (
-    <PermissionsContext.Provider value={{ permissions }}>
-      <Layout style={{ minHeight: '100vh' }}>
-        {SiderMenu({ routes, pathname, menuList, permissions })}
-        <Layout className="site-layout">
-          <Header {...props} />
-          <Content style={{ margin: '0 16px' }}>
-            <Breadcrumb {...props} />
-            <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-              {children}
-            </div>
-          </Content>
-          <Footer />
-        </Layout>
+    <Layout style={{ minHeight: '100vh' }}>
+      {SiderMenu({ routes, pathname, menuList, permissions })}
+      <Layout className="site-layout">
+        <Header {...props} />
+        <Content style={{ margin: '0 16px' }}>
+          <Breadcrumb {...props} />
+          <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
+            {children}
+          </div>
+        </Content>
+        <Footer />
       </Layout>
-    </PermissionsContext.Provider>
+    </Layout>
   );
 };

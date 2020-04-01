@@ -4,9 +4,12 @@ import { mutate } from 'swr';
 import { Button } from 'antd';
 import './index.less';
 import logo from '../assets/images/logo.svg';
+import { useStore } from '../utils/store';
+import '../models/demo';
 
 export default function(props) {
   const { history } = props;
+  const [state, dispatch] = useStore('demo');
   return (
     <div className="App">
       <header className="App-header">
@@ -24,6 +27,10 @@ export default function(props) {
         </nav>
         <Button type="primary" onClick={_ => mutate('getDemo')}>
           按钮
+        </Button>
+        <div>{state?.count}</div>
+        <Button type="primary" onClick={_ => dispatch({ type: 'add' })}>
+          add
         </Button>
         <Button type="primary" onClick={_ => history.push('/demo')}>
           Demo

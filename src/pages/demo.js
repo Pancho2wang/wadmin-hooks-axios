@@ -1,7 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { LocaleContext } from '../models/context';
+import { Button } from 'antd';
 import './index.less';
+import { useStore } from '../utils/store';
+import '../models/demo';
 
 export default function(props) {
   // const {data} = useSWR('postDemo', key => fetch(key, {a: 1}));
@@ -15,7 +17,8 @@ export default function(props) {
   //   useEffect(_ => {
   //     fetchData();
   //   }, []);
-  const value = useContext(LocaleContext);
+  const [state, dispatch] = useStore('demo');
+  console.log('state', state);
   return (
     <div className="App-header">
       <nav>
@@ -27,13 +30,17 @@ export default function(props) {
         <hr />
       </nav>
       <p className="primary">Demo Page</p>
-      <div>
+      <div>{state?.count}</div>
+      <Button type="primary" onClick={_ => dispatch({ type: 'minus' })}>
+        minus
+      </Button>
+      {/* <div>
         <div className="demo1">{value?.data?.title}</div>
         <div className="demo2">{value?.data?.title}</div>
         <div className="demo3">{value?.data?.title}</div>
         <div className="demo4">{value?.data?.title}</div>
         <div className="demo5">{value?.data?.title}</div>
-      </div>
+      </div> */}
     </div>
   );
 }

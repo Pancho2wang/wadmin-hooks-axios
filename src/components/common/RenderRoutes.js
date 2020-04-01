@@ -1,5 +1,5 @@
-import React from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 
 const renderRoutes = (routes, extraProps = {}, switchProps = {}) => {
   return routes ? (
@@ -36,6 +36,20 @@ const renderRoutes = (routes, extraProps = {}, switchProps = {}) => {
   ) : null;
 };
 
-export default props => {
-  return renderRoutes(props.routes);
-};
+const ScrollToTop = withRouter(props => {
+  const {
+    location: { pathname },
+  } = props;
+  // console.log('p', props, pathname);
+  useEffect(() => {
+    console.log('1111');
+    window.scrollTo(0, 0);
+    // window.scrollY = 0;
+    console.log('window', window.scrollY);
+    // setTimeout(_ => window.scrollTo(0, 0), 5000);
+  }, [pathname]);
+  console.log(window.scrollY, window);
+  return props.children;
+});
+
+export default props => <ScrollToTop>{renderRoutes(props.routes)}</ScrollToTop>;
