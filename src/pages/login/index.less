@@ -1,0 +1,56 @@
+@import '../../assets/less/vars';
+
+.login {
+  background-color: @baby-powder;
+  min-height: 100vh;
+  .content {
+    padding-top: 80px;
+    .title {
+      height: 44px;
+      line-height: 44px;
+      margin-bottom: 80px;
+      text-align: center;
+      .logo {
+        height: 44px;
+        margin-right: 16px;
+        vertical-align: top;
+      }
+      .title-text {
+        position: relative;
+        top: 2px;
+        color: rgba(0, 0, 0, 0.85);
+        font-weight: 600;
+        font-size: 33px;
+      }
+    }
+  }
+
+  .login-form {
+    width: 380px;
+    margin: 0 auto;
+    .login-user {
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .user-icon {
+      width: 4rem;
+      height: 4rem;
+      pointer-events: none;
+      border: solid 1px @bright-navy-blue;
+      border-radius: 4rem;
+    }
+    .user-name {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    .login-form-button {
+      width: 100%;
+    }
+    .link {
+      font-size: 0.8rem;
+      .text-right {
+        text-align: right;
+      }
+    }
+  }
+}
