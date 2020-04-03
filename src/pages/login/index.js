@@ -23,6 +23,7 @@ export default props => {
   if (appStorage.isLogin) {
     return <Redirect to={redirect || '/'} />;
   }
+
   const { account } = getStorage('account') || {};
   const [isAccount, setIsAccount] = useState(!!account);
   const [type] = useState('account');
@@ -40,7 +41,6 @@ export default props => {
   }, [getCaptchaCode]);
 
   const [, dispatch] = useStore('global');
-
   async function onLogin(values) {
     let params = { ...values, type, uuid };
     if (isAccount) {

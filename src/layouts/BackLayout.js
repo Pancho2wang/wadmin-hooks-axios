@@ -72,17 +72,17 @@ export default props => {
 
   const { data } = useSWR('sys.fakeAuthorityList', fetch);
   const { menuList, permissions } = data || {};
-  useEffect(() => {
-    dispatch({ type: 'updateState', payload: { permissions } });
-  }, [permissions, dispatch]);
-
   const [isAuthority, setIsAuthority] = useState(false);
-
   useEffect(() => {
     const { authoritys } = getAuthority(pathname, routes);
     const flag = compareAuthority(authoritys, permissions);
     setIsAuthority(flag);
+    return () => {};
   }, [pathname, routes, permissions]);
+  useEffect(() => {
+    dispatch({ type: 'updateState', payload: { permissions } });
+    return () => {};
+  }, [permissions, dispatch]);
 
   return (
     <Spin tip="Loading..." spinning={!isLogin}>
@@ -91,16 +91,18 @@ export default props => {
         <Layout className="site-layout">
           <Header {...props} />
           <Content style={{ margin: '0 16px' }}>
-            {isAuthority ? (
-              <Fragment>
-                <Breadcrumb {...props} />
-                <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-                  {children}
-                </div>
-              </Fragment>
-            ) : (
-              <NoMatch />
-            )}
+            {data ? (
+              isAuthority ? (
+                <Fragment>
+                  <Breadcrumb {...props} />
+                  <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
+                    {children}
+                  </div>
+                </Fragment>
+              ) : (
+                <NoMatch />
+              )
+            ) : null}
           </Content>
           <Footer />
         </Layout>
