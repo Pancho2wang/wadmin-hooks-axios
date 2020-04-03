@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { Redirect } from 'react-router-dom';
 import useSWR from 'swr';
 import { stringify } from 'querystring';
@@ -10,8 +10,42 @@ import Header from '../components/common/header';
 import Footer from '../components/common/footer';
 import Breadcrumb from '../components/common/breadcrumb';
 import SiderMenu from '../components/SiderMenu';
+import NoMatch from '../components/exceptions/403';
 
 const { Content } = Layout;
+
+function getAuthority(pathname, routes) {
+  let authoritys = [];
+  let isEqual = false;
+  for (let route of routes) {
+    if (route.path === pathname) {
+      authoritys = route.authority;
+      isEqual = true;
+      break;
+    } else if (route.routes && route.routes.length > 0) {
+      const { authoritys: tempAuthoritys, isEqual: tempIsEqual } = getAuthority(
+        pathname,
+        route.routes,
+      );
+      if (tempIsEqual) {
+        authoritys = tempAuthoritys;
+        isEqual = tempIsEqual;
+        break;
+      }
+    }
+  }
+  return { authoritys, isEqual };
+}
+
+function compareAuthority(authority, permissions = []) {
+  if (!authority || authority.length === 0) return true;
+  for (let key of authority) {
+    if (permissions.indexOf(key) > -1) {
+      return true;
+    }
+  }
+  return false;
+}
 
 export default props => {
   const {
@@ -42,6 +76,14 @@ export default props => {
     dispatch({ type: 'updateState', payload: { permissions } });
   }, [permissions, dispatch]);
 
+  const [isAuthority, setIsAuthority] = useState(false);
+
+  useEffect(() => {
+    const { authoritys } = getAuthority(pathname, routes);
+    const flag = compareAuthority(authoritys, permissions);
+    setIsAuthority(flag);
+  }, [pathname, routes, permissions]);
+
   return (
     <Spin tip="Loading..." spinning={!isLogin}>
       <Layout style={{ minHeight: '100vh' }}>
@@ -49,10 +91,16 @@ export default props => {
         <Layout className="site-layout">
           <Header {...props} />
           <Content style={{ margin: '0 16px' }}>
-            <Breadcrumb {...props} />
-            <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-              {children}
-            </div>
+            {isAuthority ? (
+              <Fragment>
+                <Breadcrumb {...props} />
+                <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
+                  {children}
+                </div>
+              </Fragment>
+            ) : (
+              <NoMatch />
+            )}
           </Content>
           <Footer />
         </Layout>

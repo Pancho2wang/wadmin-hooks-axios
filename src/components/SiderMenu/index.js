@@ -18,7 +18,8 @@ function getDefaultOpenKeys(pathArr, len, deep, keys = []) {
 }
 
 function isAuthority(authority, permissions) {
-  if (!authority || authority.length === 0 || !permissions || permissions.length === 0) return true;
+  if (!permissions || permissions.length === 0) return false;
+  if (!authority || authority.length === 0) return true;
   let flag = false;
   for (let authKey of authority) {
     if (permissions.indexOf(authKey) > -1) {
@@ -29,7 +30,7 @@ function isAuthority(authority, permissions) {
   return flag;
 }
 
-function getNavMenu(routes, subMenuKeys = [], permissions) {
+function getNavMenu(routes, subMenuKeys = [], permissions = []) {
   return routes.map(route => {
     const {
       redirect,
