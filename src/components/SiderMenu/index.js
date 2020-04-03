@@ -71,9 +71,7 @@ function getNavMenu(routes, subMenuKeys = [], permissions = []) {
 export default function(props) {
   const { routes, pathname } = props;
   const [collapsed, setCollapsed] = useState(false);
-  const paths = pathname.split('/');
-  const oKeys = getDefaultOpenKeys(paths, paths.length, 2, []);
-  const [openKeys, setOpenKeys] = useState([...oKeys]);
+  const [openKeys, setOpenKeys] = useState([]);
   let subMenuKeys = [];
   const changeOpenKeys = useCallback(() => {
     const paths = pathname.split('/');
@@ -87,7 +85,16 @@ export default function(props) {
     changeOpenKeys();
   }, [changeOpenKeys]);
   return (
-    <Sider collapsible collapsed={collapsed} onCollapse={setCollapsed}>
+    <Sider
+      collapsible
+      collapsed={collapsed}
+      onCollapse={value => {
+        if (value) {
+          setOpenKeys([]);
+        }
+        setCollapsed(value);
+      }}
+    >
       <div>
         <Link to="/">
           <img src={logo} className="logo" alt="logo" />
@@ -108,7 +115,6 @@ export default function(props) {
         // defaultOpenKeys={openKeys}
         // defaultSelectedKeys={[pathname]}
         mode="inline"
-        // inlineCollapsed={collapsed}
       >
         {getNavMenu(routes, subMenuKeys, permissions)}
       </Menu>
