@@ -6,6 +6,7 @@ import { UserOutlined, LockOutlined, VerifiedOutlined } from '@ant-design/icons'
 import { fetch } from '../../services';
 import { setStorage, getStorage } from '../../utils/storage';
 import { getUUID } from '../../utils/utils';
+import { useStore } from '../../utils/store';
 import './index.less';
 
 import logo from '../../assets/images/logo.svg';
@@ -38,6 +39,8 @@ export default props => {
     getCaptchaCode();
   }, [getCaptchaCode]);
 
+  const [, dispatch] = useStore('global');
+
   async function onLogin(values) {
     let params = { ...values, type, uuid };
     if (isAccount) {
@@ -51,7 +54,9 @@ export default props => {
     if (params.remember) {
       setStorage({ account: params.username }, 'account');
     }
-    setStorage({ ...params, password: undefined, isLogin: true, ...ret });
+    const user = { ...params, password: undefined, isLogin: true, ...ret };
+    setStorage(user);
+    dispatch({ type: 'updateState', payload: { user } });
     history.replace(redirect || '/');
   }
 

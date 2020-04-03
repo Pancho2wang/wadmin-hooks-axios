@@ -1,18 +1,14 @@
 import { createStore } from '../utils/store';
 
 // 定义reducer
-const reducer = (state, action) => {
+const reducer = (state, { type, payload }) => {
   // you must return a new state value when a reducer is being used.
-  switch (action.type) {
+  switch (type) {
     case 'updateState':
-      return { ...state, ...action.payload };
-    case 'add':
-      return { count: state.count + 1 };
-    case 'minus':
-      return { count: state.count - 1 };
+      return { ...state, ...payload };
     default:
       return state;
   }
 };
 
-export default createStore('global', { count: 0, permissions: [] }, reducer);
+export default createStore('global', { user: {}, permissions: [] }, reducer);

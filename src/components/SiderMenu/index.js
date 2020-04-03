@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
+import { useStore } from '../../utils/store';
 import './index.less';
 import { getIcon } from '../common/icons';
 import logo from '../../assets/images/logo.svg';
@@ -67,24 +68,23 @@ function getNavMenu(routes, subMenuKeys = [], permissions) {
 }
 
 export default function(props) {
-  const { routes, pathname, permissions } = props;
+  const { routes, pathname } = props;
   const [collapsed, setCollapsed] = useState(false);
-  // console.log('side', props, collapsed);
   const paths = pathname.split('/');
   const oKeys = getDefaultOpenKeys(paths, paths.length, 2, []);
   const [openKeys, setOpenKeys] = useState([...oKeys]);
   let subMenuKeys = [];
   const changeOpenKeys = useCallback(() => {
-    // console.log(2);
     const paths = pathname.split('/');
     const oKeys = getDefaultOpenKeys(paths, paths.length, 2, []);
     setOpenKeys(collapsed ? [] : oKeys);
   }, [pathname, collapsed]);
+  const [state] = useStore('global');
+  const { permissions } = state;
 
   useEffect(() => {
     changeOpenKeys();
   }, [changeOpenKeys]);
-  // console.log('1', openKeys, pathname);
   return (
     <Sider collapsible collapsed={collapsed} onCollapse={setCollapsed}>
       <div>

@@ -36,19 +36,14 @@ const renderRoutes = (routes, extraProps = {}, switchProps = {}) => {
   ) : null;
 };
 
+// 路由跳转页面回到顶部，当前页面刷新页面无法回到顶部
 const ScrollToTop = withRouter(props => {
   const {
     location: { pathname },
   } = props;
-  // console.log('p', props, pathname);
   useEffect(() => {
-    console.log('1111');
     window.scrollTo(0, 0);
-    // window.scrollY = 0;
-    console.log('window', window.scrollY);
-    // setTimeout(_ => window.scrollTo(0, 0), 5000);
   }, [pathname]);
-  console.log(window.scrollY, window);
   return props.children;
 });
 
