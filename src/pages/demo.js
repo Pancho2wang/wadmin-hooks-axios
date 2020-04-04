@@ -4,6 +4,7 @@ import { Button } from 'antd';
 import './index.less';
 import { useStore } from '../utils/store';
 import '../models/demo';
+import TestHook from '../components/demo/globalHook';
 
 export default function(props) {
   // const {data} = useSWR('postDemo', key => fetch(key, {a: 1}));
@@ -34,6 +35,7 @@ export default function(props) {
       <Button type="primary" onClick={_ => dispatch({ type: 'minus' })}>
         minus
       </Button>
+      <TestHook />
       {/* <div>
         <div className="demo1">{value?.data?.title}</div>
         <div className="demo2">{value?.data?.title}</div>

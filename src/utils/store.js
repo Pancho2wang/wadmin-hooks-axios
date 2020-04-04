@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 const isFunction = fn => typeof fn === 'function';
 const isString = str => typeof str === 'string';
 
-const defaultReducer = (state, payload) => payload;
+const defaultReducer = (state, action) => ({ ...state, ...action.payload });
 
 // define global store
 let $$stores = {};
@@ -75,7 +75,7 @@ export function createStore(name, state = {}, reducer) {
   $$subscribers[name] = [];
   const store = new Store(name, state, reducer);
 
-  //   $$stores = Object.assign({}, $$stores, { [name]: store });
+  // $$stores = Object.assign({}, $$stores, { [name]: store });
   $$stores = { ...$$stores, [name]: store };
   // console.log($$stores)
   return store;
@@ -95,7 +95,6 @@ export function useStore(identifier) {
     if (!store.dispatchers.includes(set)) {
       store.dispatchers.push(set);
     }
-
     return () => {
       store.dispatchers = store.dispatchers.filter(setter => setter !== set);
     };

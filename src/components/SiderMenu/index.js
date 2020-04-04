@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
 import { useStore } from '../../utils/store';
@@ -72,18 +72,18 @@ export default function(props) {
   const { routes, pathname } = props;
   const [collapsed, setCollapsed] = useState(false);
   const [openKeys, setOpenKeys] = useState([]);
+
+  const [state] = useStore('global');
+  const { permissions } = state;
+
   let subMenuKeys = [];
-  const changeOpenKeys = useCallback(() => {
+
+  useEffect(() => {
     const paths = pathname.split('/');
     const oKeys = getDefaultOpenKeys(paths, paths.length, 2, []);
     setOpenKeys(collapsed ? [] : oKeys);
   }, [pathname, collapsed]);
-  const [state] = useStore('global');
-  const { permissions } = state;
 
-  useEffect(() => {
-    changeOpenKeys();
-  }, [changeOpenKeys]);
   return (
     <Sider
       collapsible

@@ -58,7 +58,7 @@ export default props => {
   const {
     user: { isLogin },
   } = state;
-  if (!appStorage || !appStorage.isLogin) {
+  if (!appStorage || !appStorage.isLogin)
     return (
       <Redirect
         to={`/login?${stringify({
@@ -66,28 +66,35 @@ export default props => {
         })}`}
       ></Redirect>
     );
-  } else if (!isLogin) {
+  /* if (!isLogin) {
+    console.log('isLogin', state, isLogin, appStorage);
     dispatch({ type: 'updateState', payload: { user: appStorage } });
-  }
+  } */
+  useEffect(() => {
+    if (!isLogin) {
+      dispatch({ type: 'updateState', payload: { user: appStorage } });
+    }
+  }, [dispatch, appStorage, isLogin]);
 
   const { data } = useSWR('sys.fakeAuthorityList', fetch);
   const { menuList, permissions } = data || {};
   const [isAuthority, setIsAuthority] = useState(false);
+
+  useEffect(() => {
+    dispatch({ type: 'updateState', payload: { permissions } });
+  }, [dispatch, permissions]);
+
   useEffect(() => {
     const { authoritys } = getAuthority(pathname, routes);
     const flag = compareAuthority(authoritys, permissions);
     setIsAuthority(flag);
-    return () => {};
   }, [pathname, routes, permissions]);
-  useEffect(() => {
-    dispatch({ type: 'updateState', payload: { permissions } });
-    return () => {};
-  }, [permissions, dispatch]);
 
   return (
     <Spin tip="Loading..." spinning={!isLogin}>
       <Layout style={{ minHeight: '100vh' }}>
-        {SiderMenu({ routes, pathname, menuList })}
+        {/* {SiderMenu({ routes, pathname, menuList })} */}
+        <SiderMenu {...{ routes, pathname, menuList }} />
         <Layout className="site-layout">
           <Header {...props} />
           <Content style={{ margin: '0 16px' }}>
