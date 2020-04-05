@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { Redirect } from 'react-router-dom';
 import useSWR from 'swr';
 import { stringify } from 'querystring';
-import { Layout, Spin } from 'antd';
+import { Layout, Spin, Card } from 'antd';
 import { getStorage } from '../utils/storage';
 import { fetch } from '../services';
 import { useStore } from '../utils/store';
@@ -95,16 +95,14 @@ export default props => {
       <Layout style={{ minHeight: '100vh' }}>
         {/* {SiderMenu({ routes, pathname, menuList })} */}
         <SiderMenu {...{ routes, pathname, menuList }} />
-        <Layout className="site-layout">
+        <Layout>
           <Header {...props} />
-          <Content style={{ margin: '0 16px' }}>
+          <Content className="mx-15">
             {data ? (
               isAuthority ? (
                 <Fragment>
                   <Breadcrumb {...props} />
-                  <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-                    {children}
-                  </div>
+                  <Card bordered={false}>{children}</Card>
                 </Fragment>
               ) : (
                 <NoMatch />

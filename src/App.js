@@ -14,7 +14,7 @@ import './models/global';
 function App() {
   // const { data } = useSWR('ws', getStorage);
   return (
-    <div className="font-size">
+    <div className="font-size bg-color">
       <BrowserRouter>
         <RenderRoutes routes={routerConfig.routes} />
       </BrowserRouter>
