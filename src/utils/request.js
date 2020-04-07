@@ -32,10 +32,12 @@ axios.interceptors.request.use(
     //   }
     // }
     const appStorage = getStorage();
+    window.g_dispatch({ type: 'updateState', payload: { spinning: true } });
     return { ...config, headers: { ...config.headers, token: appStorage?.token } };
   },
   function(error) {
     // 对请求错误做些什么
+    window.g_dispatch({ type: 'updateState', payload: { spinning: false } });
     return Promise.reject(error);
   },
 );
@@ -45,15 +47,16 @@ axios.interceptors.response.use(
   function(response) {
     // 对响应数据做点什么
     // console.log('response', response);
+    window.g_dispatch({ type: 'updateState', payload: { spinning: false } });
     if (response.status >= 200 && response.status < 300) {
       const {
         data,
-        config: { errorTips, successTips },
+        config: { successTips },
       } = response;
       const { code, msg } = data || {};
-      if (errorTips && code !== 0) {
+      if (code != null && code !== 0) {
         message.error(msg);
-      } else if (successTips && code === 0) {
+      } else if (successTips) {
         message.success(msg);
       }
       if (code === 401) {
@@ -80,6 +83,7 @@ axios.interceptors.response.use(
   },
   function(error) {
     // 对响应错误做点什么
+    window.g_dispatch({ type: 'updateState', payload: { spinning: false } });
     return Promise.reject(error);
   },
 );

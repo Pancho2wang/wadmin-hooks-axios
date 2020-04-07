@@ -11,4 +11,4 @@ const reducer = (state, { type, payload }) => {
   }
 };
 
-export default createStore('global', { user: {}, permissions: [] }, reducer);
+export default createStore('global', { spinning: false, user: {}, permissions: [] }, reducer);

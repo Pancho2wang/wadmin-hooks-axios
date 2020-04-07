@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { Redirect } from 'react-router-dom';
 import useSWR from 'swr';
 import { stringify } from 'querystring';
-import { Layout, Spin, Card } from 'antd';
+import { Layout, Card } from 'antd';
 import { getStorage } from '../utils/storage';
 import { fetch } from '../services';
 import { useStore } from '../utils/store';
@@ -91,27 +91,25 @@ export default props => {
   }, [pathname, routes, permissions]);
 
   return (
-    <Spin tip="Loading..." spinning={!isLogin}>
-      <Layout style={{ minHeight: '100vh' }}>
-        {/* {SiderMenu({ routes, pathname, menuList })} */}
-        <SiderMenu {...{ routes, pathname, menuList }} />
-        <Layout>
-          <Header {...props} />
-          <Content className="mx-15">
-            {data ? (
-              isAuthority ? (
-                <Fragment>
-                  <Breadcrumb {...props} />
-                  <Card bordered={false}>{children}</Card>
-                </Fragment>
-              ) : (
-                <NoMatch />
-              )
-            ) : null}
-          </Content>
-          <Footer />
-        </Layout>
+    <Layout style={{ minHeight: '100vh' }}>
+      {/* {SiderMenu({ routes, pathname, menuList })} */}
+      <SiderMenu {...{ routes, pathname, menuList }} />
+      <Layout>
+        <Header {...props} />
+        <Content className="mx-15">
+          {data ? (
+            isAuthority ? (
+              <Fragment>
+                <Breadcrumb {...props} />
+                <Card bordered={false}>{children}</Card>
+              </Fragment>
+            ) : (
+              <NoMatch />
+            )
+          ) : null}
+        </Content>
+        <Footer />
       </Layout>
-    </Spin>
+    </Layout>
   );
 };

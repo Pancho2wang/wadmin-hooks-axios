@@ -4,14 +4,14 @@ import { Form, Input, Button } from 'antd';
 const FormItem = Form.Item;
 
 function getFormItem(item) {
-  const { type, placeholder = '请输入' } = item;
+  const { type, placeholder = '请输入', ...ret } = item;
   switch (type) {
     case 'input':
-      return <Input placeholder={placeholder} />;
+      return <Input placeholder={placeholder} {...ret} />;
     default:
       break;
   }
-  return null;
+  return <Input placeholder={placeholder} {...ret} />;
 }
 
 /**
@@ -19,6 +19,10 @@ function getFormItem(item) {
  * const formRef = useRef();
  * <SearchForm ref={formRef} onSearch={onSearch} />
  * 父组件调用 const values = formRef.current.getFieldsValue();
+ *
+ * 入参：props: {formItems, onSearch}
+ * formItems: 对象数组 {type, label name, placeholder}
+ * onSearch: 函数
  */
 export default forwardRef((props, ref) => {
   const { formItems, onSearch } = props;
@@ -28,17 +32,15 @@ export default forwardRef((props, ref) => {
     onSearch && onSearch();
   }
   useImperativeHandle(ref, () => ({
-    getFieldsValue: () => {
-      return form.getFieldsValue();
-    },
+    getFieldsValue: () => form.getFieldsValue(),
   }));
   return (
     <div className="py-15">
       <Form name="search_form" form={form} onFinish={onSearch} layout="inline">
         {formItems.map(item => {
-          const { label, name, ...ret } = item;
+          const { label, name, rules, ...ret } = item;
           return (
-            <FormItem key={name} label={label} name={name}>
+            <FormItem key={name} label={label} name={name} rules={rules}>
               {getFormItem(ret)}
             </FormItem>
           );

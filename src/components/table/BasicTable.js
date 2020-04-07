@@ -3,9 +3,7 @@ import { Table } from 'antd';
 import { getValue } from '../../utils/utils';
 
 export default props => {
-  const { data, columns, onTableChange } = props;
-  const { list, ...pagination } = data;
-
+  const { dataSource = [], pagination = false, columns, rowKey, onTableChange } = props;
   function onChange(pagination, filtersArg, sorter) {
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
       const newObj = { ...obj };
@@ -27,10 +25,10 @@ export default props => {
     <Table
       className="py-15"
       columns={columns}
-      dataSource={list || []}
-      pagination={pagination || {}}
+      dataSource={dataSource}
+      pagination={pagination}
       onChange={onChange}
-      rowKey="roleId"
+      rowKey={rowKey}
     />
   );
 };
